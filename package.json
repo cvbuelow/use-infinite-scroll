@@ -1,0 +1,24 @@
+{
+  "name": "@react/use-infinite-scroll",
+  "version": "1.0.0",
+  "description": "React hook to create inifinite scroll effect",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cvbuelow/use-infinite-scroll.git"
+  },
+  "keywords": [
+    "react",
+    "infinite",
+    "scroll"
+  ],
+  "author": "Carl von Buelow",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cvbuelow/use-infinite-scroll/issues"
+  },
+  "homepage": "https://github.com/cvbuelow/use-infinite-scroll#readme"
+}
