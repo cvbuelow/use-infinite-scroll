@@ -1,5 +1,5 @@
 {
-  "name": "@react/use-infinite-scroll",
+  "name": "@cvbuelow/use-infinite-scroll",
   "version": "1.0.0",
   "description": "React hook to create inifinite scroll effect",
   "main": "src/index.js",
