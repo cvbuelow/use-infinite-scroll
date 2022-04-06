@@ -1,52 +1,68 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef } from "react";
+
+const findLastChild = (node) => {
+  const numChildren = node.childNodes.length;
+  return numChildren && node.childNodes[numChildren - 1];
+}
 
 const findDeepestChild = (node) => {
-  const numChildren = node.childNodes.length;
-  return numChildren ? findDeepestChild(node.childNodes[numChildren - 1]) : node;
+  const lastChild = findLastChild(node);
+  return lastChild ? findDeepestChild(lastChild) : node;
 };
 
-const useInfiniteScroll = ({ onScrollBottom, rootMargin = "500px", threshold = 1.0 }) => {
+const useInfiniteScroll = ({
+  onScrollBottom,
+  root,
+  rootMargin = "500px",
+  threshold = 0.0,
+  useDeepTarget,
+}) => {
   const scrollRef = useRef();
-  const mutationObserver = useRef();
-  const intersectionObserver = useRef();
-  const targetNode = useRef();
-
-  const setTarget = useCallback((parent) => {
-    const node = findDeepestChild(parent);
-    if (targetNode.current && node !== targetNode.current) {
-      intersectionObserver.current.unobserve(targetNode.current);
-    }
-    if (node instanceof Element) {
-      targetNode.current = node;
-      intersectionObserver.current.observe(node);
-    }
-  }, []);
 
   useEffect(() => {
-    mutationObserver.current = new MutationObserver((mutationsList) => {
+    if (!scrollRef.current) return;
+
+    let intersectionObserver;
+    let mutationObserver;
+    let targetNode;
+
+    const setTarget = (parent) => {
+      const node = useDeepTarget ? findDeepestChild(parent) : parent;
+      if (targetNode && node !== targetNode) {
+        intersectionObserver.unobserve(targetNode);
+      }
+      if (node instanceof Element) {
+        targetNode = node;
+        intersectionObserver.observe(node);
+      }
+    };
+
+    mutationObserver = new MutationObserver((mutationsList) => {
       const addedNodes = mutationsList[mutationsList.length - 1].addedNodes;
       if (addedNodes.length) {
         setTarget(addedNodes[addedNodes.length - 1]);
       }
     });
 
-    intersectionObserver.current = new IntersectionObserver(entry => {
+    intersectionObserver = new IntersectionObserver(entry => {
       if (entry[0].isIntersecting) {
         onScrollBottom();
       }
     }, {
+      root: root || null,
       rootMargin,
       threshold
     });
 
-    setTarget(scrollRef.current);
-    mutationObserver.current.observe(scrollRef.current, { childList: true, subtree: true });
+    setTarget(useDeepTarget ? scrollRef.current : findLastChild(scrollRef.current));
+
+    mutationObserver.observe(scrollRef.current, { childList: true, subtree: true });
 
     return () => {
-      mutationObserver.current.disconnect();
-      intersectionObserver.current.disconnect();
+      mutationObserver.disconnect();
+      intersectionObserver.disconnect();
     };
-  }, [onScrollBottom, setTarget]);
+  }, [onScrollBottom, scrollRef.current, root, rootMargin, threshold]);
 
   return scrollRef;
 };
