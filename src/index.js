@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 const findLastChild = (node) => {
   const numChildren = node.childNodes.length;
@@ -13,7 +13,7 @@ const findDeepestChild = (node) => {
 const useInfiniteScroll = ({
   onScrollBottom,
   root,
-  rootMargin = "500px",
+  rootMargin = '500px',
   threshold = 0.0,
   useDeepTarget,
 }) => {

@@ -2,7 +2,7 @@
 
 Simple react hook for lazy loading more content when the bottom of the page is reached. Uses `IntersectionObserver` and `MutationObserver` for best performance.
 
-## Usage
+## Installation
 
 ```sh
 npm i @cvbuelow/use-infinite-scroll
@@ -37,3 +37,25 @@ function MovieSearch() {
 
 export default MovieSearch;
 ```
+
+## Config
+
+### `onScrollBottom`
+
+Callback function to be invoked when the `IntersectionObserver` is triggered.
+
+### `root`
+
+The root to be used for the `IntersectionObserver`. Defaults to the browser viewport.
+
+### `rootMargin = '500px'`
+
+Passed to the `IntersectionObserver` config.
+
+### `threshold = 0.0`
+
+Passed to the `IntersectionObserver` config.
+
+### `useDeepTarget = false`
+
+When set to `true` the deepest child in the list of items is used as the target for the `IntersectionObserver`
